@@ -25,9 +25,49 @@ function Achievements() {
 
   return (
     <section className="inner-page" id="achievements">
-      <section className="page-hero achievements-hero">
-        <div><p className="eyebrow">Results that speak</p><h1>Built by <em>Consistency.</em></h1><p>At MRF ZONE, every success story reflects the strength of our community and the commitment of our members.</p></div>
-      </section>
+      <section
+  className="page-hero achievements-hero"
+  style={{
+    minHeight: "380px",
+    padding: "30px 20px",
+  }}
+>
+  <div>
+    <p className="eyebrow">Results that speak</p>
+
+    <h1
+      style={{
+        display: "block",
+        whiteSpace: "normal",
+        fontSize: "clamp(42px, 10vw, 64px)",
+        lineHeight: "1",
+      }}
+    >
+      Built by{" "}
+      <em
+        style={{
+          color: "#e9112b",
+          display: "block",
+          fontStyle: "normal",
+        }}
+      >
+        Consistency.
+      </em>
+    </h1>
+
+    <p
+      style={{
+        whiteSpace: "normal",
+        maxWidth: "560px",
+        lineHeight: "1.6",
+        fontSize: "16px",
+      }}
+    >
+      At MRF ZONE, every success story reflects the strength of our
+      community and the commitment of our members.
+    </p>
+  </div>
+</section>
       <section className="section stats-section" ref={sectionRef}>
         <div className="section-heading centered reveal visible"><p className="eyebrow">The MRF ZONE community</p><h2>By The <em>Numbers</em></h2></div>
         <div className="stats-grid">

@@ -48,9 +48,50 @@ function Contact() {
 
   return (
     <section className="inner-page" id="contact">
-      <section className="page-hero contact-hero">
-        <div><p className="eyebrow">Start your journey</p><h1>Talk to the <em>Team.</em></h1><p>Connect with MRF ZONE and start your fitness transformation with trusted guidance.</p></div>
-      </section>
+    <section
+  className="page-hero contact-hero"
+  style={{
+    minHeight: "380px",
+    padding: "30px 20px",
+  }}
+>
+  <div>
+    <p className="eyebrow">Start your journey</p>
+
+    <h1
+      style={{
+        display: "block",
+        whiteSpace: "normal",
+        fontSize: "clamp(42px, 10vw, 64px)",
+        lineHeight: "1",
+      }}
+    >
+      Talk to the
+      <em
+        style={{
+          display: "block",
+          color: "#e9112b",
+          fontStyle: "normal",
+          marginTop: "6px",
+        }}
+      >
+        Team.
+      </em>
+    </h1>
+
+    <p
+      style={{
+        whiteSpace: "normal",
+        maxWidth: "560px",
+        lineHeight: "1.6",
+        fontSize: "16px",
+      }}
+    >
+      Connect with MRF ZONE and start your fitness transformation with
+      trusted guidance.
+    </p>
+  </div>
+</section>
       <section className="section contact-section">
         <div className="contact-layout">
           <div className="contact-details reveal visible"><p className="eyebrow">Find MRF ZONE</p><h2>Ready When <em>You Are.</em></h2>
