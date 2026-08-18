@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 function MapIcon() {
   return (
@@ -36,16 +37,82 @@ function PeopleIcon() {
     </svg>
   )
 }
-
 function Contact() {
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const submitForm = (event) => {
-    event.preventDefault()
-    setSubmitted(true)
-    event.currentTarget.reset()
-  }
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const enquiryTemplateId = import.meta.env.VITE_EMAILJS_ENQUIRY_TEMPLATE_ID;
+  const autoReplyTemplateId = import.meta.env.VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
+  const submitForm = async (event) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    setLoading(true);
+    setErrorMessage("");
+
+    if (!serviceId || !enquiryTemplateId || !autoReplyTemplateId || !publicKey) {
+      setErrorMessage("Email is not configured yet. Please contact the gym directly.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+    // 1. Send enquiry to MRF ZONE
+    const enquiryResponse = await emailjs.sendForm(
+      serviceId,
+      enquiryTemplateId,
+      form,
+      {
+        publicKey,
+      }
+    );
+
+    console.log(
+      "Enquiry sent:",
+      enquiryResponse.status,
+      enquiryResponse.text
+    );
+
+    // Wait because EmailJS has a 1 request/second rate limit
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    // 2. Send auto-reply to customer
+    const autoReplyResponse = await emailjs.sendForm(
+      serviceId,
+      autoReplyTemplateId,
+      form,
+      {
+        publicKey,
+      }
+    );
+
+    console.log(
+      "Auto-reply sent:",
+      autoReplyResponse.status,
+      autoReplyResponse.text
+    );
+
+    setSubmitted(true);
+    form.reset();
+
+    setTimeout(() => {
+      setSubmitted(false);
+    }, 5000);
+
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      console.error("Status:", error?.status);
+      console.error("Text:", error?.text);
+
+      setErrorMessage(error?.text || "Unable to send your message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <section className="inner-page" id="contact">
     <section
@@ -191,11 +258,18 @@ function Contact() {
     />
   </label>
 
-  <button type="submit">Send Message</button>
+  <button type="submit" disabled={loading}>
+    {loading ? "Sending..." : "Send Message"}
+  </button>
 
   {submitted && (
     <p className="form-success" role="status">
       Thanks — your message has been received. We will be in touch soon.
+    </p>
+  )}
+  {errorMessage && (
+    <p className="form-success" role="alert">
+      {errorMessage}
     </p>
   )}
 </form>
